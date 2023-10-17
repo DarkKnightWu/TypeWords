@@ -101,10 +101,22 @@ try {
 
   // console.log(newDict.length);
 
-  // fs.writeFileSync(
-  //   "./public/dicts/coca20000.json",
-  //   JSON.stringify(dicts)
-  // );
+  dicts.map((v) => {
+    v.trans = v.trans.map((d) => {
+      let t2 = d.replaceAll("int.", `^int.`);
+      t2 = t2.split("^").filter((v) => v);
+      d = t2;
+      return d;
+    });
+
+    v.trans = v.trans.flat();
+
+    return v;
+  });
+  fs.writeFileSync(
+    "./public/dicts/coca20000.json",
+    JSON.stringify(dicts, null, 2)
+  );
 } catch (err) {
   console.error(err);
 }
