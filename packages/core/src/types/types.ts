@@ -70,9 +70,9 @@ export interface Article {
   sections: Sentence[][]
   audioSrc: string
   audioFileId: string
-  lrcPosition: number[][]
-  nameList: string[]
-  questions: {
+  lrcPosition?: number[][]
+  nameList?: string[]
+  questions?: {
     stem: string
     options: string[]
     correctAnswer: string[]
