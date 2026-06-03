@@ -103,10 +103,10 @@ export const TourConfig = {
 
 export const IS_DEV = import.meta.env.MODE === 'development'
 export const LIB_JS_URL = {
-  SHEPHERD: `${ENV.RESOURCE_URL}/libs/Shepherd.14.5.1.mjs.js`,
-  SNAPDOM: `${ENV.RESOURCE_URL}/libs/snapdom.min.js`,
-  JSZIP: `${ENV.RESOURCE_URL}/libs/jszip.min.js`,
-  XLSX: `${ENV.RESOURCE_URL}/libs/xlsx.full.min.js`,
+  SHEPHERD: `${ENV.LIBS_URL}Shepherd.14.5.1.mjs.js`,
+  SNAPDOM: `${ENV.LIBS_URL}/snapdom.min.js`,
+  JSZIP: `${ENV.LIBS_URL}/jszip.min.js`,
+  XLSX: `${ENV.LIBS_URL}/xlsx.full.min.js`,
 }
 export const PronunciationApi = 'https://dict.youdao.com/dictvoice?audio='
 export const DefaultShortcutKeyMap = {

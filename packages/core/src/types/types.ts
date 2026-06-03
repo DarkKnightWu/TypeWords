@@ -113,7 +113,7 @@ export interface Statistics {
 }
 
 export type DictResource = {
-  id: string
+  id: string | number
   name: string
   description: string
   url: string
