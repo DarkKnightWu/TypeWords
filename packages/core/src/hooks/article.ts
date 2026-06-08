@@ -1,10 +1,11 @@
 import type { Article, Sentence } from '../types'
 import { getDefaultArticleWord, getDefaultDict, PracticeArticleWordType } from '../types'
 import { _nextTick, cloneDeep } from '../utils'
-import { usePlayWordAudio } from './sound'
+import { usePlayWordAudio, useTTsPlayAudio } from './sound'
 import { getSentenceAllText, getSentenceAllTranslateText } from './translate'
 import { useBaseStore } from '../stores/base'
 import { useRuntimeStore } from '../stores/runtime'
+import { useSettingStore } from '../stores/setting'
 import { nanoid } from 'nanoid'
 import { DictId } from '../config/env'
 
@@ -375,6 +376,58 @@ export function usePlaySentenceAudio() {
 
   return {
     playSentenceAudio,
+  }
+}
+
+export interface ArticleTextAudio {
+  text: string
+  start?: number
+  end?: number
+}
+
+function hasValidArticleTextAudioPosition(target: ArticleTextAudio) {
+  if (target.start === undefined || target.start === null) return false
+  let start = Number(target.start)
+  let end = Number(target.end)
+  return Number.isFinite(start) && (end === -1 || (Number.isFinite(end) && end > start))
+}
+
+export function usePlayArticleTextAudio() {
+  const settingStore = useSettingStore()
+  const ttsPlayAudio = useTTsPlayAudio()
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  function playArticleTextAudio(target: ArticleTextAudio, ref?: HTMLAudioElement) {
+    if (!target.text) return
+    clearTimeout(timer)
+
+    if (hasValidArticleTextAudioPosition(target) && ref?.src) {
+      if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel()
+      ref.pause()
+      let start = Number(target.start)
+      ref.volume = settingStore.articleSoundVolume / 100
+      ref.playbackRate = settingStore.articleSoundSpeed
+      ref.currentTime = start
+      ref.play()
+
+      let end = Number(target.end)
+      if (Number.isFinite(end) && end !== -1) {
+        timer = setTimeout(() => {
+          ref.pause()
+        }, ((end - start) / ref.playbackRate) * 1000)
+      }
+      return
+    }
+
+    if (ref?.src) ref.pause()
+    ttsPlayAudio(target.text, {
+      rate: settingStore.articleSoundSpeed,
+      volume: settingStore.articleSoundVolume / 100,
+    })
+  }
+
+  return {
+    playArticleTextAudio,
   }
 }
 

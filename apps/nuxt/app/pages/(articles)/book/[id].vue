@@ -4,7 +4,7 @@ import ArticleList from '@typewords/core/components/list/ArticleList.vue'
 import { useBaseStore } from '@typewords/core/stores/base.ts'
 import type { Article, Dict, Statistics } from '@typewords/core/types/types.ts'
 import { useRuntimeStore } from '@typewords/core/stores/runtime.ts'
-import { BackIcon, BaseButton, BaseIcon, Switch, Toast } from '@typewords/base'
+import { BackIcon, BaseButton, BaseIcon, Switch, Toast, VolumeIcon } from '@typewords/base'
 import { useRoute, useRouter } from 'vue-router'
 import EditBook from '@typewords/core/components/article/EditBook.vue'
 import { computed, onMounted, onUnmounted, watch } from 'vue'
@@ -27,6 +27,7 @@ import { useGetDict } from '@typewords/core/hooks/dict.ts'
 import { DictType } from '@typewords/core/types/enum.ts'
 import { usePracticeWordPersistence } from '@typewords/core/composables/usePracticePersistence.ts'
 import { getPracticeArticleCacheLocal } from '@typewords/core/utils/cache.ts'
+import { usePlayArticleTextAudio } from '@typewords/core/hooks/article.ts'
 
 const { t } = useI18n()
 
@@ -46,6 +47,7 @@ let isEdit = $ref(false)
 let isAdd = $ref(false)
 let studyLoading = $ref(false)
 let articleRef = $ref<HTMLDivElement>()
+let audioRef = $ref<HTMLAudioElement>()
 
 let selectArticle: Article = $ref(getDefaultArticle({ id: -1 }))
 
@@ -195,6 +197,24 @@ const handleSpeedUpdate = (speed: number) => {
   settingStore.articleSoundSpeed = speed
 }
 
+const { playArticleTextAudio } = usePlayArticleTextAudio()
+
+function playArticleTitleAudio() {
+  playArticleTextAudio({ text: selectArticle.title }, audioRef)
+}
+
+function playArticleQuestionAudio() {
+  if (!selectArticle?.question?.text) return
+  playArticleTextAudio(
+    {
+      text: selectArticle.question.text,
+      start: selectArticle.question.start,
+      end: selectArticle.question.end,
+    },
+    audioRef
+  )
+}
+
 // 计算段落数量
 const paragraphCount = $computed(() => {
   if (!selectArticle.text) return 0
@@ -305,7 +325,10 @@ watch(
                   <div>
                     <div class="flex justify-between items-center relative">
                       <span>
-                        <span class="text-3xl">{{ selectArticle.title }}</span>
+                        <span class="inline-flex items-center gap-1">
+                          <span class="text-3xl">{{ selectArticle.title }}</span>
+                          <VolumeIcon :simple="true" :title="$t('play')" :cb="playArticleTitleAudio" />
+                        </span>
                         <span class="ml-6 text-2xl" v-if="showTranslate">{{ selectArticle.titleTranslate }}</span>
                       </span>
                       <div class="flex items-center gap-2 mr-4">
@@ -336,7 +359,10 @@ watch(
                     </div>
 
                     <div class="mt-2 text-2xl" v-if="selectArticle?.question?.text">
-                      <div>Question: {{ selectArticle?.question?.text }}</div>
+                      <div class="inline-flex items-center gap-1">
+                        <span>Question: {{ selectArticle?.question?.text }}</span>
+                        <VolumeIcon :simple="true" :title="$t('play')" :cb="playArticleQuestionAudio" />
+                      </div>
                       <div
                         class="text-xl color-translate-second"
                         v-if="showTranslate && (displayMode !== 'card' || shouldShowInlineTranslation)"
@@ -443,6 +469,7 @@ watch(
                   class="border-t-1 border-t-gray-300 border-solid border-0 center gap-2 pt-4"
                 >
                   <ArticleAudio
+                    ref="audioRef"
                     :article="selectArticle"
                     @update-speed="handleSpeedUpdate"
                     @update-volume="handleVolumeUpdate"
