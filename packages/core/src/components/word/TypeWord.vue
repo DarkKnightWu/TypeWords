@@ -1006,11 +1006,11 @@ const isCollect = $computed(() => isWordCollect(props.word))
         </template>
       </template>
 
-      <div
+       <div
         class="anim"
-        v-opacity="(settingStore.translate && !settingStore.dictation) || showFullWord || showWordResult"
+        v-opacity="((settingStore.translate && !settingStore.dictation) || showFullWord || showWordResult) && settingStore.showEtymologyAndRelWords"
       >
-        <template v-if="word?.etymology?.length && false">
+        <template v-if="word?.etymology?.length">
           <div class="line-white my-3"></div>
           <div class="flex">
             <div class="label">{{ $t('etymology') }}</div>
@@ -1024,7 +1024,7 @@ const isCollect = $computed(() => isWordCollect(props.word))
           <!--        <div class="line-white my-2"></div>-->
         </template>
 
-        <template v-if="word?.relWords?.root && false">
+        <template v-if="word?.relWords?.root">
           <div class="flex">
             <div class="label">{{ $t('related_words') }}</div>
             <div class="flex flex-col gap-3">
@@ -1044,7 +1044,6 @@ const isCollect = $computed(() => isWordCollect(props.word))
           </div>
         </template>
       </div>
-    </div>
     <div
       v-if="!editingNote"
       class="cursor"
