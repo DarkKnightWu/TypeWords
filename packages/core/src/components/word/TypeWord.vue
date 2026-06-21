@@ -729,7 +729,7 @@ const isCollect = $computed(() => isWordCollect(props.word))
           "
           v-if="settingStore.soundType === 'uk' && word.phonetic0"
         >
-          [{{ word.phonetic0 }}]
+          / {{ word.phonetic0 }} /
         </div>
         <div
           class="phonetic"
@@ -744,7 +744,7 @@ const isCollect = $computed(() => isWordCollect(props.word))
           "
           v-if="settingStore.soundType === 'us' && word.phonetic1"
         >
-          [{{ word.phonetic1 }}]
+          / {{ word.phonetic1 }} /
         </div>
         <VolumeIcon
           :title="`发音(${settingStore.shortcutKeyMap[ShortcutKey.PlayWordPronunciation]})`"
