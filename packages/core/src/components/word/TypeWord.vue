@@ -457,6 +457,7 @@ async function onTyping(e: KeyboardEvent) {
       input += letter
       wrong = ''
       playKeyboardAudio()
+      inputLock = false
     } else {
       typo()
       wrong = letter
@@ -465,6 +466,7 @@ async function onTyping(e: KeyboardEvent) {
       setTimeout(() => {
         if (settingStore.inputWrongClear && !isTypingSentence()) input = ''
         wrong = ''
+        inputLock = false
       }, 500)
     }
     // 更新当前单词信息
@@ -484,8 +486,6 @@ async function onTyping(e: KeyboardEvent) {
           completeTypeWord(true)
         }
       }
-    } else {
-      inputLock = false
     }
   }
 }
