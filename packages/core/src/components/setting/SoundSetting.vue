@@ -133,11 +133,7 @@ function previewTtsVoice(voiceName: string) {
     <SettingItem v-if="showSpeedSubsInSections" :title="$t('sentence_speed')">
       <Slider v-model="settingStore.sentenceSoundSpeed" :step="0.1" :min="0.5" :max="3" showText showValue />
     </SettingItem>
-    <div>{{ $t('tts_voice_preview_sentence') }}{{ exampleText }}</div>
-    <SettingItem
-      :title="$t('tts_voice_setting_title')"
-      :desc="$t('tts_voice_setting_desc')"
-    >
+    <SettingItem :title="$t('tts_voice_setting_title')" :desc="$t('tts_voice_setting_desc')">
       <Select
         :key="ttsSelectKey"
         v-model="currentTtsVoice"
@@ -146,12 +142,15 @@ function previewTtsVoice(voiceName: string) {
       >
         <Option v-for="voice in ttsVoiceList" :key="voice.name" :label="voice.name" :value="voice.name">
           <div class="flex justify-between items-center w-full">
-            <span class="truncate">{{ voice.name + `（${voice.localService ? $t('tts_local_voice') : $t('tts_network_voice')}）` }}</span>
+            <span class="truncate">{{
+              voice.name + `（${voice.localService ? $t('tts_local_voice') : $t('tts_network_voice')}）`
+            }}</span>
             <VolumeIcon :time="100" @click="previewTtsVoice(voice.name)" />
           </div>
         </Option>
       </Select>
     </SettingItem>
+    <div>{{ $t('tts_voice_preview_sentence') }}{{ exampleText }}</div>
     <div v-if="!currentTtsVoice" class="text-sm text-orange-500 mt-1 mb-2">
       {{ $t('tts_no_voice_warning') }}
     </div>

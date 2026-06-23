@@ -15,14 +15,14 @@ export const SOUND_VOLUME_ITEMS: { key: VolumeKey; labelKey: string }[] = [
   { key: 'wordSoundVolume', labelKey: 'word_pronunciation' },
   { key: 'sentenceSoundVolume', labelKey: 'sentence_volume' },
   { key: 'articleSoundVolume', labelKey: 'article_volume' },
-  { key: 'keyboardSoundVolume', labelKey: 'keyboard_sound' },
+  { key: 'keyboardSoundVolume', labelKey: 'keyboard_volume' },
   { key: 'effectSoundVolume', labelKey: 'effect_volume' },
 ]
 
 export const SOUND_SPEED_ITEMS: { key: SpeedKey; labelKey: string }[] = [
-  { key: 'wordSoundSpeed', labelKey: 'word_pronunciation' },
+  { key: 'wordSoundSpeed', labelKey: 'word_speed' },
   { key: 'sentenceSoundSpeed', labelKey: 'sentence_speed' },
-  { key: 'articleSoundSpeed', labelKey: 'article_sound_settings' },
+  { key: 'articleSoundSpeed', labelKey: 'article_speed' },
 ]
 
 function createMasterControl<K extends keyof SettingState>(keys: K[]) {
